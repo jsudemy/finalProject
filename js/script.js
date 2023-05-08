@@ -1,29 +1,16 @@
-/* Задание на урок:
-
-1) Создать переменную numberOfFilms и в неё поместить ответ от пользователя на вопрос:
-'Сколько фильмов вы уже посмотрели?'
-
-2) Создать объект personalMovieDB и в него поместить такие свойства:
-    - count - сюда передается ответ на первый вопрос
-    - movies - в это свойство поместить пустой объект
-    - actors - тоже поместить пустой объект
-    - genres - сюда поместить пустой массив
-    - privat - в это свойство поместить boolean(логическое) значение false
-
-3) Задайте пользователю по два раза вопросы:
-    - 'Один из последних просмотренных фильмов?'
-    - 'На сколько оцените его?'
-Ответы стоит поместить в отдельные переменные
-Записать ответы в объект movies в формате: 
-    movies: {
-        'logan': '8.1'
-    }
-
-Проверить, чтобы все работало без ошибок в консоли */
-
 'use strict';
 
-const numberOfFilms = prompt('Сколько фильмов вы уже посмотрели?', '');
+let numberOfFilms; 
+
+function start() {
+  numberOfFilms = +prompt('Сколько фильмов вы уже посмотрели?', '');
+
+  while (numberOfFilms == '' || numberOfFilms == null || isNaN(numberOfFilms)); {
+    numberOfFilms = +prompt('Сколько фильмов вы уже посмотрели?', '');
+  }
+}
+
+start();
 
 const personalMovieDB = {
   count: numberOfFilms,
@@ -33,11 +20,62 @@ const personalMovieDB = {
   privat: false,
 };
 
-let movieTitle1 = prompt('Один из последних просмотренных фильмов?', ''),
-  movieRating1 = prompt('На сколько оцените его?', ''),
-  movieTitle2 = prompt('Один из последних просмотренных фильмов?', ''),
-  movieRating2 = prompt('На сколько оцените его?', '');
+function rememberMyFilms() {
+  for (let i = 0; i < 2; i++) {
+    const movieTitle = prompt('Один из последних просмотренных фильмов?', '');
+    const movieRating = prompt('На сколько оцените его?', '');
+  
+    if (!movieTitle || !movieRating ||movieTitle.length < 50) {
+      console.log('error');
+      i--;
+      continue;
+    }
+  
+    personalMovieDB.movies[movieTitle] = movieRating;
+  }
+}
 
-personalMovieDB.movies[movieTitle1] = movieRating1; // here we assing key and value for the object movies
-personalMovieDB.movies[movieTitle2] = movieRating2;
+rememberMyFilms();
+
+function detectPersonalLevel() {
+  if (personalMovieDB.count < 10) {
+    alert('Просмотрено довольно мало фильмов');
+  } 
+  if (personalMovieDB.count >= 10 && personalMovieDB.count < 30) {
+    alert('You are classic watcher');
+  }
+  if (personalMovieDB.count >= 30) {
+    alert('Your are great watcher!');
+  }
+  if (personalMovieDB.count === null || personalMovieDB.count === undefined || personalMovieDB.count === NaN) {
+    alert('Erorr');
+  }
+}
+
+detectPersonalLevel();
+
+function showMyDb(hidden) {
+  if (!hidden) {
+    console.log(personalMovieDB);
+  }
+}
+
+showMyDb(personalMovieDB.privat);
+
+/* function writeYourGenres() {
+  let i = 0;
+  do {
+    personalMovieDB.genres[i] = prompt(`Ваш любимы жанр под номером ${i + 1}`, '');
+    i++;
+  } while (i < 3); {
+  } 
+} */
+
+function writeYourGenres() {
+  for (let i = 1; i <= 3; i++) {
+    personalMovieDB.genres[i - 1] = prompt(`Ваш любимы жанр под номером ${i}`);// когда записываю в массив то отнемаю 
+  }
+}
+
+writeYourGenres();
 
